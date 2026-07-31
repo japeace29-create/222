@@ -11,12 +11,16 @@ module.exports = async (req, res) => {
       const chatId = update.message.chat.id;
       await sendTelegramMessage(
         chatId,
-        'Привет! 💌\n\nЭто бот для создания романтичного сайта-приглашения на свидание.\n\nНажми кнопку ниже — получишь уникальную ссылку. Отправь её тому, кого хочешь пригласить. Как только он(а) заполнит форму на сайте, я сразу пришлю тебе ответ сюда.',
-        { inline_keyboard: [[{ text: '💌 Создать ссылку', callback_data: 'create_link' }]] }
+        'Привет! 💌\n\nЭто бот для создания романтичного сайта-приглашения на свидание.\n\nДля кого создаём приглашение?',
+        { inline_keyboard: [[
+          { text: '👩 Любимой', callback_data: 'gender_f' },
+          { text: '🧑 Любимому', callback_data: 'gender_m' }
+        ]] }
       );
-    } else if (update.callback_query && update.callback_query.data === 'create_link') {
+    } else if (update.callback_query && (update.callback_query.data === 'gender_f' || update.callback_query.data === 'gender_m')) {
       const chatId = update.callback_query.message.chat.id;
-      const link = `${siteUrl}/?u=${makeToken('t', chatId)}`;
+      const gender = update.callback_query.data === 'gender_m' ? 'm' : 'f';
+      const link = `${siteUrl}/?u=${makeToken('t', chatId)}&g=${gender}`;
       await sendTelegramMessage(chatId, `Твоя уникальная ссылка готова 💌\n\n${link}\n\nОтправь её и жди ответа — я пришлю его прямо сюда.`);
       await fetch(`https://api.telegram.org/bot${process.env.BOT_TOKEN}/answerCallbackQuery`, {
         method: 'POST',

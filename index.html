@@ -9,7 +9,7 @@
 <body>
   <div class="card">
     <div class="hearts-top"><span>💗</span><span>💕</span></div>
-    <h1 class="script-title">Моя любимая,</h1>
+    <h1 class="script-title" id="titleEl" data-f="Моя любимая," data-m="Мой любимый,">Моя любимая,</h1>
     <div class="divider"><span>♥</span></div>
 
     <div class="avatar">
@@ -33,9 +33,17 @@
 
     const params = new URLSearchParams(window.location.search);
     const token = params.get('u');
+    const gender = params.get('g') === 'm' ? 'm' : 'f';
+
+    document.getElementById('titleEl').textContent = gender === 'm'
+      ? document.getElementById('titleEl').dataset.m
+      : document.getElementById('titleEl').dataset.f;
 
     yesBtn.addEventListener('click', () => {
-      window.location.href = token ? `second.html?u=${encodeURIComponent(token)}` : 'second.html';
+      const qs = new URLSearchParams();
+      if (token) qs.set('u', token);
+      qs.set('g', gender);
+      window.location.href = `second.html?${qs.toString()}`;
     });
 
     function dodge() {

@@ -12,7 +12,7 @@
     <h1 class="title-script">Ура!</h1>
     <div class="divider"><span>♥</span></div>
 
-    <p class="lead">Отлично, я очень рад, что ты согласилась 💍</p>
+    <p class="lead" id="gladLead" data-f="Отлично, я очень рад, что ты согласилась 💍" data-m="Отлично, я очень рад, что ты согласился 💍">Отлично, я очень рад, что ты согласилась 💍</p>
     <p class="lead">Когда ты свободна?</p>
 
     <div class="field-label">📅 Выбери дату</div>
@@ -110,14 +110,20 @@
       });
     });
 
-    const token = new URLSearchParams(window.location.search).get('u');
+    const pageParams = new URLSearchParams(window.location.search);
+    const token = pageParams.get('u');
+    const gender = pageParams.get('g') === 'm' ? 'm' : 'f';
+
+    const gladLead = document.getElementById('gladLead');
+    gladLead.textContent = gender === 'm' ? gladLead.dataset.m : gladLead.dataset.f;
 
     submitBtn.addEventListener('click', () => {
       if (submitBtn.disabled) return;
       const payload = {
         date: dateInput.value,
         time: selectedTime,
-        food: Array.from(selectedFood)
+        food: Array.from(selectedFood),
+        gender
       };
       localStorage.setItem('dateInvite', JSON.stringify(payload));
 
