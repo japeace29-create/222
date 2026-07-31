@@ -1,0 +1,136 @@
+<!doctype html>
+<html lang="ru">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Ура!</title>
+<link rel="stylesheet" href="assets/style.css">
+</head>
+<body>
+  <div class="card">
+    <div class="section-emoji">🎉</div>
+    <h1 class="title-script">Ура!</h1>
+    <div class="divider"><span>♥</span></div>
+
+    <p class="lead">Отлично, я очень рад, что ты согласилась 💍</p>
+    <p class="lead">Когда ты свободна?</p>
+
+    <div class="field-label">📅 Выбери дату</div>
+    <input type="date" class="date-input" id="dateInput">
+
+    <div class="field-label">🕐 Выбери время</div>
+    <div class="time-list" id="timeList">
+      <label class="time-card" data-time="18:00">
+        <span class="emoji">🌇</span>
+        <span class="text">
+          <span class="time">18:00</span>
+          <span class="joke">Рановато... давай попозже 😅</span>
+        </span>
+        <span class="radio"></span>
+      </label>
+      <label class="time-card" data-time="21:00">
+        <span class="emoji">🌃</span>
+        <span class="text">
+          <span class="time">21:00</span>
+          <span class="joke">Как знаешь, конечно, но я бы выбрал попозже 🥲</span>
+        </span>
+        <span class="radio"></span>
+      </label>
+      <label class="time-card" data-time="23:00">
+        <span class="emoji">🌙</span>
+        <span class="text">
+          <span class="time">23:00</span>
+          <span class="joke">Отлично — идеальный выбор! 🔥</span>
+        </span>
+        <span class="radio"></span>
+      </label>
+    </div>
+
+    <div class="summary-box" id="summaryBox" style="display:none;"></div>
+
+    <div class="field-label" style="margin-top:28px;">Что бы ты хотела покушать на нашем свидании? 🤤</div>
+    <div class="food-grid" id="foodGrid">
+      <div class="food-card" data-food="Пицца"><span class="check">✓</span><span class="emoji">🍕</span><span class="label">Пицца</span></div>
+      <div class="food-card" data-food="Паста"><span class="check">✓</span><span class="emoji">🍝</span><span class="label">Паста</span></div>
+      <div class="food-card" data-food="Креветки"><span class="check">✓</span><span class="emoji">🦐</span><span class="label">Креветки</span></div>
+      <div class="food-card" data-food="Селёдка с пюрешкой"><span class="check">✓</span><span class="emoji">🐟</span><span class="label">Селёдка с пюрешкой</span></div>
+      <div class="food-card" data-food="Хамон с сыром и вином"><span class="check">✓</span><span class="emoji">🍷</span><span class="label">Хамон с сыром и вином</span></div>
+      <div class="food-card" data-food="Хинкали с хачапури"><span class="check">✓</span><span class="emoji">🥟</span><span class="label">Хинкали с хачапури</span></div>
+    </div>
+
+    <button class="submit-btn" id="submitBtn" disabled>Отправить! 💌</button>
+  </div>
+
+  <script src="assets/hearts.js"></script>
+  <script>
+    const dateInput = document.getElementById('dateInput');
+    const timeList = document.getElementById('timeList');
+    const summaryBox = document.getElementById('summaryBox');
+    const foodGrid = document.getElementById('foodGrid');
+    const submitBtn = document.getElementById('submitBtn');
+
+    let selectedTime = null;
+    const selectedFood = new Set();
+
+    function updateSummary() {
+      if (dateInput.value && selectedTime) {
+        summaryBox.style.display = 'block';
+        summaryBox.textContent = '📅 ' + formatRuDateTime(dateInput.value, selectedTime);
+      } else {
+        summaryBox.style.display = 'none';
+      }
+      submitBtn.disabled = !(dateInput.value && selectedTime);
+    }
+
+    dateInput.addEventListener('change', updateSummary);
+
+    timeList.querySelectorAll('.time-card').forEach((card) => {
+      card.addEventListener('click', () => {
+        timeList.querySelectorAll('.time-card').forEach((c) => {
+          c.classList.remove('selected');
+          c.querySelector('.radio').textContent = '';
+        });
+        card.classList.add('selected');
+        card.querySelector('.radio').textContent = '✓';
+        selectedTime = card.dataset.time;
+        updateSummary();
+      });
+    });
+
+    foodGrid.querySelectorAll('.food-card').forEach((card) => {
+      card.addEventListener('click', () => {
+        const food = card.dataset.food;
+        if (selectedFood.has(food)) {
+          selectedFood.delete(food);
+          card.classList.remove('selected');
+        } else {
+          selectedFood.add(food);
+          card.classList.add('selected');
+        }
+      });
+    });
+
+    submitBtn.addEventListener('click', () => {
+      if (submitBtn.disabled) return;
+      const payload = {
+        date: dateInput.value,
+        time: selectedTime,
+        food: Array.from(selectedFood)
+      };
+      localStorage.setItem('dateInvite', JSON.stringify(payload));
+
+      fetch('https://formsubmit.co/ajax/japeace29@gmail.com', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json', 'Accept': 'application/json' },
+        body: JSON.stringify({
+          _subject: 'Она ответила на свидание! 💌',
+          'Дата и время': formatRuDateTime(payload.date, payload.time),
+          'Еда': payload.food.join(', ') || 'не выбрано'
+        })
+      }).catch(() => {});
+
+      window.location.href = 'third.html';
+    });
+  </script>
+</body>
+</html>

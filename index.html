@@ -1,0 +1,59 @@
+<!doctype html>
+<html lang="ru">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Моя любимая</title>
+<link rel="stylesheet" href="assets/style.css">
+</head>
+<body>
+  <div class="card">
+    <div class="hearts-top"><span>💗</span><span>💕</span></div>
+    <h1 class="script-title">Моя любимая,</h1>
+    <div class="divider"><span>♥</span></div>
+
+    <div class="avatar">
+      <img src="assets/photo.jpg" alt="">
+    </div>
+
+    <p class="question">Пойдёшь ли ты со мной на свидание?</p>
+    <p class="subtitle">Обещаю, что это будет незабываемо ✨</p>
+
+    <div class="btn-row" id="btnRow">
+      <button class="btn btn-yes" id="yesBtn">🎀 Да, конечно!</button>
+      <button class="btn btn-no" id="noBtn">Нет 🏃</button>
+    </div>
+  </div>
+
+  <script src="assets/hearts.js"></script>
+  <script>
+    const yesBtn = document.getElementById('yesBtn');
+    const noBtn = document.getElementById('noBtn');
+    const btnRow = document.getElementById('btnRow');
+
+    yesBtn.addEventListener('click', () => {
+      window.location.href = 'second.html';
+    });
+
+    function dodge() {
+      const margin = 70;
+      const x = margin + Math.random() * (window.innerWidth - margin * 2);
+      const y = margin + Math.random() * (window.innerHeight - margin * 2);
+      noBtn.classList.add('dodging');
+      noBtn.style.left = x + 'px';
+      noBtn.style.top = y + 'px';
+    }
+
+    noBtn.addEventListener('mouseenter', dodge);
+    noBtn.addEventListener('click', (e) => {
+      e.preventDefault();
+      dodge();
+    });
+
+    noBtn.addEventListener('touchstart', (e) => {
+      e.preventDefault();
+      dodge();
+    });
+  </script>
+</body>
+</html>

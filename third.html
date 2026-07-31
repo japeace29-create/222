@@ -1,0 +1,46 @@
+<!doctype html>
+<html lang="ru">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Я счастлив!</title>
+<link rel="stylesheet" href="assets/style.css">
+</head>
+<body>
+  <div class="card">
+    <div class="avatar" style="width:90px;height:90px;font-size:38px;">
+      <span>💖</span>
+    </div>
+    <h1 class="title-script">Я счастлив!</h1>
+    <div class="divider"><span>♥</span></div>
+
+    <p class="lead">Я действительно очень рад, что ты не сказала «нет» — это так неожиданно. Я счастлив! 💕</p>
+    <p class="lead">Жди меня, я уже начинаю готовиться к нашему особенному вечеру 🍷✨</p>
+
+    <div class="info-block">
+      <div class="info-label">Наше свидание</div>
+      <div class="info-value" id="dateTimeValue">💗 —</div>
+
+      <div class="info-label">Будем кушать</div>
+      <div class="info-value" id="foodValue">🍽️ —</div>
+    </div>
+
+    <a class="home-btn" href="index.html">🏠 На главную</a>
+  </div>
+
+  <script src="assets/hearts.js"></script>
+  <script>
+    const raw = localStorage.getItem('dateInvite');
+    const dateTimeValue = document.getElementById('dateTimeValue');
+    const foodValue = document.getElementById('foodValue');
+
+    if (raw) {
+      const data = JSON.parse(raw);
+      dateTimeValue.textContent = '💗 ' + formatRuDateTime(data.date, data.time);
+      foodValue.textContent = data.food && data.food.length
+        ? '🍽️ ' + data.food.join(', ')
+        : '🍽️ сюрприз';
+    }
+  </script>
+</body>
+</html>
