@@ -31,8 +31,11 @@
     const noBtn = document.getElementById('noBtn');
     const btnRow = document.getElementById('btnRow');
 
+    const params = new URLSearchParams(window.location.search);
+    const token = params.get('u');
+
     yesBtn.addEventListener('click', () => {
-      window.location.href = 'second.html';
+      window.location.href = token ? `second.html?u=${encodeURIComponent(token)}` : 'second.html';
     });
 
     function dodge() {

@@ -110,6 +110,8 @@
       });
     });
 
+    const token = new URLSearchParams(window.location.search).get('u');
+
     submitBtn.addEventListener('click', () => {
       if (submitBtn.disabled) return;
       const payload = {
@@ -119,15 +121,13 @@
       };
       localStorage.setItem('dateInvite', JSON.stringify(payload));
 
-      fetch('https://formsubmit.co/ajax/japeace29@gmail.com', {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json', 'Accept': 'application/json' },
-        body: JSON.stringify({
-          _subject: 'Она ответила на свидание! 💌',
-          'Дата и время': formatRuDateTime(payload.date, payload.time),
-          'Еда': payload.food.join(', ') || 'не выбрано'
-        })
-      }).catch(() => {});
+      if (token) {
+        fetch('/api/notify', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ u: token, ...payload })
+        }).catch(() => {});
+      }
 
       window.location.href = 'third.html';
     });
