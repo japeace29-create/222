@@ -1,4 +1,4 @@
-const { verifyToken, formatRuDateTime, notifyUser } = require('./_lib');
+const { verifyToken, formatRuDateTime, notifyUser, incrCounter } = require('./_lib');
 
 module.exports = async (req, res) => {
   if (req.method !== 'POST') return res.status(405).json({ error: 'method not allowed' });
@@ -14,6 +14,7 @@ module.exports = async (req, res) => {
 
   try {
     await notifyUser(parsed.platform, parsed.id, text);
+    await incrCounter('completed');
   } catch (e) {
     return res.status(502).json({ error: 'send failed' });
   }

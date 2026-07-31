@@ -76,4 +76,47 @@ async function notifyUser(platform, id, text) {
   return sendTelegramMessage(id, text);
 }
 
-module.exports = { makeToken, verifyToken, formatRuDateTime, sendTelegramMessage, sendVkMessage, notifyUser };
+// Simple counters via Vercel KV (Upstash Redis REST API). No-ops if not configured.
+function kvReady() {
+  return !!(process.env.KV_REST_API_URL && process.env.KV_REST_API_TOKEN);
+}
+
+async function incrCounter(key) {
+  if (!kvReady()) return null;
+  try {
+    const resp = await fetch(`${process.env.KV_REST_API_URL}/incr/${key}`, {
+      headers: { Authorization: `Bearer ${process.env.KV_REST_API_TOKEN}` }
+    });
+    const data = await resp.json();
+    return data.result;
+  } catch (e) {
+    return null;
+  }
+}
+
+async function getCounter(key) {
+  if (!kvReady()) return null;
+  try {
+    const resp = await fetch(`${process.env.KV_REST_API_URL}/get/${key}`, {
+      headers: { Authorization: `Bearer ${process.env.KV_REST_API_TOKEN}` }
+    });
+    const data = await resp.json();
+    return Number(data.result) || 0;
+  } catch (e) {
+    return null;
+  }
+}
+
+async function getStats() {
+  const [linksCreated, completed] = await Promise.all([
+    getCounter('links_created'),
+    getCounter('completed')
+  ]);
+  return { linksCreated, completed };
+}
+
+module.exports = {
+  makeToken, verifyToken, formatRuDateTime,
+  sendTelegramMessage, sendVkMessage, notifyUser,
+  incrCounter, getStats, kvReady
+};

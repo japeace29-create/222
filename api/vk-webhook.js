@@ -1,4 +1,4 @@
-const { makeToken, sendVkMessage } = require('./_lib');
+const { makeToken, sendVkMessage, incrCounter, getStats, kvReady } = require('./_lib');
 
 const GENDER_KEYBOARD = {
   one_time: true,
@@ -26,13 +26,22 @@ module.exports = async (req, res) => {
       const message = body.object.message;
       const userId = message.from_id;
       const siteUrl = `https://${req.headers.host}`;
+      const text = (message.text || '').trim().toLowerCase();
 
       let payload = null;
       try { payload = message.payload ? JSON.parse(message.payload) : null; } catch (e) {}
 
       if (payload && payload.cmd === 'gender' && (payload.g === 'f' || payload.g === 'm')) {
         const link = `${siteUrl}/invite.html?u=${makeToken('v', userId)}&g=${payload.g}`;
+        await incrCounter('links_created');
         await sendVkMessage(userId, `Твоя уникальная ссылка готова 💌\n\n${link}\n\nОтправь её и жди ответа — я пришлю его прямо сюда.`);
+      } else if (text === 'статистика' || text === '/stats') {
+        if (!kvReady()) {
+          await sendVkMessage(userId, 'Счётчик статистики ещё не подключён (нужен Vercel KV).');
+        } else {
+          const { linksCreated, completed } = await getStats();
+          await sendVkMessage(userId, `📊 Статистика\n\nСоздано ссылок: ${linksCreated ?? 0}\nОтветили на приглашение: ${completed ?? 0}`);
+        }
       } else {
         await sendVkMessage(
           userId,
