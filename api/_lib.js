@@ -62,7 +62,12 @@ async function sendVkMessage(userId, text, keyboard) {
     random_id: String(Math.floor(Math.random() * 2 ** 31))
   });
   if (keyboard) params.set('keyboard', JSON.stringify(keyboard));
-  await fetch('https://api.vk.com/method/messages.send', { method: 'POST', body: params });
+  const resp = await fetch('https://api.vk.com/method/messages.send', { method: 'POST', body: params });
+  const data = await resp.json();
+  if (data.error) {
+    throw new Error(`VK API error ${data.error.error_code}: ${data.error.error_msg}`);
+  }
+  return data;
 }
 
 // Unified sender used by /api/notify — picks the right platform.
