@@ -31,7 +31,7 @@ module.exports = async (req, res) => {
       try { payload = message.payload ? JSON.parse(message.payload) : null; } catch (e) {}
 
       if (payload && payload.cmd === 'gender' && (payload.g === 'f' || payload.g === 'm')) {
-        const link = `${siteUrl}/?u=${makeToken('v', userId)}&g=${payload.g}`;
+        const link = `${siteUrl}/invite.html?u=${makeToken('v', userId)}&g=${payload.g}`;
         await sendVkMessage(userId, `Твоя уникальная ссылка готова 💌\n\n${link}\n\nОтправь её и жди ответа — я пришлю его прямо сюда.`);
       } else {
         await sendVkMessage(

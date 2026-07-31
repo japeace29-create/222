@@ -1,0 +1,70 @@
+<!doctype html>
+<html lang="ru">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Моя любимая</title>
+<link rel="stylesheet" href="assets/style.css">
+</head>
+<body>
+  <div class="card">
+    <div class="hearts-top"><span>💗</span><span>💕</span></div>
+    <h1 class="script-title" id="titleEl" data-f="Моя любимая," data-m="Мой любимый,">Моя любимая,</h1>
+    <div class="divider"><span>♥</span></div>
+
+    <div class="avatar">
+      <span>😻</span>
+    </div>
+
+    <p class="question">Пойдёшь ли ты со мной на свидание?</p>
+    <p class="subtitle">Обещаю, что это будет незабываемо ✨</p>
+
+    <div class="btn-row" id="btnRow">
+      <button class="btn btn-yes" id="yesBtn">🎀 Да, конечно!</button>
+      <button class="btn btn-no" id="noBtn">Нет 🏃</button>
+    </div>
+  </div>
+
+  <script src="assets/hearts.js"></script>
+  <script>
+    const yesBtn = document.getElementById('yesBtn');
+    const noBtn = document.getElementById('noBtn');
+    const btnRow = document.getElementById('btnRow');
+
+    const params = new URLSearchParams(window.location.search);
+    const token = params.get('u');
+    const gender = params.get('g') === 'm' ? 'm' : 'f';
+
+    document.getElementById('titleEl').textContent = gender === 'm'
+      ? document.getElementById('titleEl').dataset.m
+      : document.getElementById('titleEl').dataset.f;
+
+    yesBtn.addEventListener('click', () => {
+      const qs = new URLSearchParams();
+      if (token) qs.set('u', token);
+      qs.set('g', gender);
+      window.location.href = `second.html?${qs.toString()}`;
+    });
+
+    function dodge() {
+      const margin = 70;
+      const x = margin + Math.random() * (window.innerWidth - margin * 2);
+      const y = margin + Math.random() * (window.innerHeight - margin * 2);
+      noBtn.classList.add('dodging');
+      noBtn.style.left = x + 'px';
+      noBtn.style.top = y + 'px';
+    }
+
+    noBtn.addEventListener('mouseenter', dodge);
+    noBtn.addEventListener('click', (e) => {
+      e.preventDefault();
+      dodge();
+    });
+
+    noBtn.addEventListener('touchstart', (e) => {
+      e.preventDefault();
+      dodge();
+    });
+  </script>
+</body>
+</html>

@@ -20,7 +20,7 @@ module.exports = async (req, res) => {
     } else if (update.callback_query && (update.callback_query.data === 'gender_f' || update.callback_query.data === 'gender_m')) {
       const chatId = update.callback_query.message.chat.id;
       const gender = update.callback_query.data === 'gender_m' ? 'm' : 'f';
-      const link = `${siteUrl}/?u=${makeToken('t', chatId)}&g=${gender}`;
+      const link = `${siteUrl}/invite.html?u=${makeToken('t', chatId)}&g=${gender}`;
       await sendTelegramMessage(chatId, `Твоя уникальная ссылка готова 💌\n\n${link}\n\nОтправь её и жди ответа — я пришлю его прямо сюда.`);
       await fetch(`https://api.telegram.org/bot${process.env.BOT_TOKEN}/answerCallbackQuery`, {
         method: 'POST',
