@@ -12,7 +12,7 @@
     <h1 class="title-script">Ура!</h1>
     <div class="divider"><span>♥</span></div>
 
-    <p class="lead" id="gladLead" data-f="Отлично, я очень рад, что ты согласилась 💍" data-m="Отлично, я очень рад, что ты согласился 💍" data-x="Отлично, я очень рад, что ты согласился(-ась) 💍">Отлично, я очень рад, что ты согласилась 💍</p>
+    <p class="lead" id="gladLead" data-f="Отлично, я очень рад, что ты согласилась 💍" data-m="Отлично, я очень рад, что ты согласился 💍" data-x="Отлично, я очень рад(а), что ты согласился(-ась) 💍">Отлично, я очень рад, что ты согласилась 💍</p>
     <p class="lead">Когда ты свободна?</p>
 
     <div class="field-label">📅 Выбери дату</div>
@@ -32,7 +32,7 @@
         <span class="emoji">🌃</span>
         <span class="text">
           <span class="time">21:00</span>
-          <span class="joke">Как знаешь, конечно, но я бы выбрал попозже 🥲</span>
+          <span class="joke" id="jokeMid" data-f="Как знаешь, конечно, но я бы выбрал попозже 🥲" data-m="Как знаешь, конечно, но я бы выбрал попозже 🥲" data-x="Как знаешь, конечно, но я бы выбрал(а) попозже 🥲">Как знаешь, конечно, но я бы выбрал попозже 🥲</span>
         </span>
         <span class="radio"></span>
       </label>
@@ -117,6 +117,9 @@
 
     const gladLead = document.getElementById('gladLead');
     gladLead.textContent = gender === 'm' ? gladLead.dataset.m : gender === 'x' ? gladLead.dataset.x : gladLead.dataset.f;
+
+    const jokeMid = document.getElementById('jokeMid');
+    jokeMid.textContent = gender === 'm' ? jokeMid.dataset.m : gender === 'x' ? jokeMid.dataset.x : jokeMid.dataset.f;
 
     submitBtn.addEventListener('click', () => {
       if (submitBtn.disabled) return;
