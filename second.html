@@ -12,8 +12,8 @@
     <h1 class="title-script">Ура!</h1>
     <div class="divider"><span>♥</span></div>
 
-    <p class="lead" id="gladLead" data-f="Отлично, я очень рад, что ты согласилась 💍" data-m="Отлично, я очень рад, что ты согласился 💍" data-x="Отлично, я очень рад(а), что ты согласился(-ась) 💍">Отлично, я очень рад, что ты согласилась 💍</p>
-    <p class="lead">Когда ты свободна?</p>
+    <p class="lead" id="gladLead" data-f="Отлично, я очень рад, что ты согласилась 💍" data-m="Отлично, я очень рад, что ты согласился 💍" data-x="Отлично! 💍">Отлично, я очень рад, что ты согласилась 💍</p>
+    <p class="lead" id="whenLead" data-f="Когда ты свободна?" data-m="Когда ты свободен?" data-x="Когда будет время?">Когда ты свободна?</p>
 
     <div class="field-label">📅 Выбери дату</div>
     <input type="date" class="date-input" id="dateInput">
@@ -32,7 +32,7 @@
         <span class="emoji">🌃</span>
         <span class="text">
           <span class="time">21:00</span>
-          <span class="joke" id="jokeMid" data-f="Как знаешь, конечно, но я бы выбрал попозже 🥲" data-m="Как знаешь, конечно, но я бы выбрал попозже 🥲" data-x="Как знаешь, конечно, но я бы выбрал(а) попозже 🥲">Как знаешь, конечно, но я бы выбрал попозже 🥲</span>
+          <span class="joke" id="jokeMid" data-f="Как знаешь, конечно, но я бы выбрал попозже 🥲" data-m="Как знаешь, конечно, но я бы выбрал попозже 🥲" data-x="Шикарно, отличное время! 😄">Как знаешь, конечно, но я бы выбрал попозже 🥲</span>
         </span>
         <span class="radio"></span>
       </label>
@@ -48,7 +48,7 @@
 
     <div class="summary-box" id="summaryBox" style="display:none;"></div>
 
-    <div class="field-label" style="margin-top:28px;">Что бы ты хотела покушать на нашем свидании? 🤤</div>
+    <div class="field-label" id="foodLabel" style="margin-top:28px;" data-f="Что бы ты хотела покушать на нашем свидании? 🤤" data-m="Что бы ты хотел покушать на нашем свидании? 🤤" data-x="Что предпочитаем из еды на свидании? 🤤">Что бы ты хотела покушать на нашем свидании? 🤤</div>
     <div class="food-grid" id="foodGrid">
       <div class="food-card" data-food="Пицца"><span class="check">✓</span><span class="emoji">🍕</span><span class="label">Пицца</span></div>
       <div class="food-card" data-food="Паста"><span class="check">✓</span><span class="emoji">🍝</span><span class="label">Паста</span></div>
@@ -115,11 +115,15 @@
     const genderParam = pageParams.get('g');
     const gender = genderParam === 'm' ? 'm' : genderParam === 'x' ? 'x' : 'f';
 
-    const gladLead = document.getElementById('gladLead');
-    gladLead.textContent = gender === 'm' ? gladLead.dataset.m : gender === 'x' ? gladLead.dataset.x : gladLead.dataset.f;
+    function applyGenderText(id) {
+      const el = document.getElementById(id);
+      el.textContent = gender === 'm' ? el.dataset.m : gender === 'x' ? el.dataset.x : el.dataset.f;
+    }
 
-    const jokeMid = document.getElementById('jokeMid');
-    jokeMid.textContent = gender === 'm' ? jokeMid.dataset.m : gender === 'x' ? jokeMid.dataset.x : jokeMid.dataset.f;
+    applyGenderText('gladLead');
+    applyGenderText('whenLead');
+    applyGenderText('jokeMid');
+    applyGenderText('foodLabel');
 
     submitBtn.addEventListener('click', () => {
       if (submitBtn.disabled) return;

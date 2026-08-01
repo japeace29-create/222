@@ -11,10 +11,10 @@
     <div class="avatar" style="width:90px;height:90px;font-size:38px;">
       <span>💖</span>
     </div>
-    <h1 class="title-script">Я счастлив!</h1>
+    <h1 class="title-script" id="happyTitle" data-f="Я счастлив!" data-m="Я счастлив!" data-x="Великолепно!">Я счастлив!</h1>
     <div class="divider"><span>♥</span></div>
 
-    <p class="lead" id="happyLead" data-f="Я действительно очень рад, что ты не сказала «нет» — это так неожиданно. Я счастлив! 💕" data-m="Я действительно очень рад, что ты не сказал «нет» — это так неожиданно. Я счастлив! 💕" data-x="Я действительно очень рад(а), что ты не сказал(а) «нет» — это так неожиданно. Я счастлив(а)! 💕">Я действительно очень рад, что ты не сказала «нет» — это так неожиданно. Я счастлив! 💕</p>
+    <p class="lead" id="happyLead" data-f="Я действительно очень рад, что ты не сказала «нет» — это так неожиданно. Я счастлив! 💕" data-m="Я действительно очень рад, что ты не сказал «нет» — это так неожиданно. Я счастлив! 💕" data-x="Я действительно кайфую — это так неожиданно. Супер! 💕">Я действительно очень рад, что ты не сказала «нет» — это так неожиданно. Я счастлив! 💕</p>
     <p class="lead">Жди меня, я уже начинаю готовиться к нашему особенному вечеру 🍷✨</p>
 
     <div class="info-block">
@@ -41,8 +41,13 @@
         ? '🍽️ ' + data.food.join(', ')
         : '🍽️ сюрприз';
 
-      const happyLead = document.getElementById('happyLead');
-      happyLead.textContent = data.gender === 'm' ? happyLead.dataset.m : data.gender === 'x' ? happyLead.dataset.x : happyLead.dataset.f;
+      function applyGenderText(id) {
+        const el = document.getElementById(id);
+        el.textContent = data.gender === 'm' ? el.dataset.m : data.gender === 'x' ? el.dataset.x : el.dataset.f;
+      }
+
+      applyGenderText('happyTitle');
+      applyGenderText('happyLead');
     }
   </script>
 </body>
