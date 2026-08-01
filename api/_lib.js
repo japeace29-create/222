@@ -115,8 +115,42 @@ async function getStats() {
   return { linksCreated, completed };
 }
 
+// Short-lived "waiting for a name" state per sender, so the bot can ask a follow-up
+// question across two separate webhook calls (stateless functions otherwise can't).
+async function setPendingName(platform, id, gender) {
+  if (!kvReady()) return;
+  try {
+    await fetch(`${process.env.KV_REST_API_URL}/set/pending:${platform}:${id}/${gender}?EX=600`, {
+      headers: { Authorization: `Bearer ${process.env.KV_REST_API_TOKEN}` }
+    });
+  } catch (e) {}
+}
+
+async function getPendingName(platform, id) {
+  if (!kvReady()) return null;
+  try {
+    const resp = await fetch(`${process.env.KV_REST_API_URL}/get/pending:${platform}:${id}`, {
+      headers: { Authorization: `Bearer ${process.env.KV_REST_API_TOKEN}` }
+    });
+    const data = await resp.json();
+    return data.result || null;
+  } catch (e) {
+    return null;
+  }
+}
+
+async function clearPendingName(platform, id) {
+  if (!kvReady()) return;
+  try {
+    await fetch(`${process.env.KV_REST_API_URL}/del/pending:${platform}:${id}`, {
+      headers: { Authorization: `Bearer ${process.env.KV_REST_API_TOKEN}` }
+    });
+  } catch (e) {}
+}
+
 module.exports = {
   makeToken, verifyToken, formatRuDateTime,
   sendTelegramMessage, sendVkMessage, notifyUser,
-  incrCounter, getStats, kvReady
+  incrCounter, getStats, kvReady,
+  setPendingName, getPendingName, clearPendingName
 };

@@ -34,15 +34,18 @@
     const params = new URLSearchParams(window.location.search);
     const token = params.get('u');
     const gender = params.get('g') === 'm' ? 'm' : 'f';
+    const customName = params.get('n');
 
-    document.getElementById('titleEl').textContent = gender === 'm'
-      ? document.getElementById('titleEl').dataset.m
-      : document.getElementById('titleEl').dataset.f;
+    const titleEl = document.getElementById('titleEl');
+    titleEl.textContent = customName
+      ? customName
+      : (gender === 'm' ? titleEl.dataset.m : titleEl.dataset.f);
 
     yesBtn.addEventListener('click', () => {
       const qs = new URLSearchParams();
       if (token) qs.set('u', token);
       qs.set('g', gender);
+      if (customName) qs.set('n', customName);
       window.location.href = `second.html?${qs.toString()}`;
     });
 
