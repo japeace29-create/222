@@ -50,7 +50,7 @@ module.exports = async (req, res) => {
         await incrCounter('links_created');
         await sendVkMessage(userId, `Твоя уникальная ссылка готова 💌\n\n${link}\n\nОтправь её и жди ответа — я пришлю его прямо сюда.`);
       } else if (payload && payload.cmd === 'custom') {
-        await setPendingName('v', userId, 'f');
+        await setPendingName('v', userId, 'x');
         await sendVkMessage(userId, 'Напиши свой вариант обращения (например: «Зайка,» или «Катюша,») — он появится на сайте вместо «Моя любимая,».');
       } else if (lower === 'статистика' || lower === '/stats') {
         if (!kvReady()) {

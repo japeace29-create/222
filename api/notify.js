@@ -7,8 +7,14 @@ module.exports = async (req, res) => {
   const parsed = verifyToken(u);
   if (!parsed) return res.status(400).json({ error: 'invalid token' });
 
+  const heading = gender === 'm'
+    ? 'Он ответил на свидание! 💌'
+    : gender === 'x'
+      ? 'Получен ответ на свидание! 💌'
+      : 'Она ответила на свидание! 💌';
+
   const text =
-    (gender === 'm' ? 'Он ответил на свидание! 💌' : 'Она ответила на свидание! 💌') + '\n\n' +
+    heading + '\n\n' +
     `📅 ${formatRuDateTime(date, time)}\n` +
     `🍽️ ${(food || []).join(', ') || 'не выбрано'}`;
 

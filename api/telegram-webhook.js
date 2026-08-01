@@ -53,7 +53,7 @@ module.exports = async (req, res) => {
       });
     } else if (update.callback_query && update.callback_query.data === 'custom') {
       const chatId = update.callback_query.message.chat.id;
-      await setPendingName('t', chatId, 'f');
+      await setPendingName('t', chatId, 'x');
       await sendTelegramMessage(chatId, 'Напиши свой вариант обращения (например: «Зайка,» или «Катюша,») — он появится на сайте вместо «Моя любимая,».');
       await fetch(`https://api.telegram.org/bot${process.env.BOT_TOKEN}/answerCallbackQuery`, {
         method: 'POST',

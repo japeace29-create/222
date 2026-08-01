@@ -33,7 +33,8 @@
 
     const params = new URLSearchParams(window.location.search);
     const token = params.get('u');
-    const gender = params.get('g') === 'm' ? 'm' : 'f';
+    const genderParam = params.get('g');
+    const gender = genderParam === 'm' ? 'm' : genderParam === 'x' ? 'x' : 'f';
     const customName = params.get('n');
 
     const titleEl = document.getElementById('titleEl');

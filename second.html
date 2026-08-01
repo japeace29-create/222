@@ -12,7 +12,7 @@
     <h1 class="title-script">Ура!</h1>
     <div class="divider"><span>♥</span></div>
 
-    <p class="lead" id="gladLead" data-f="Отлично, я очень рад, что ты согласилась 💍" data-m="Отлично, я очень рад, что ты согласился 💍">Отлично, я очень рад, что ты согласилась 💍</p>
+    <p class="lead" id="gladLead" data-f="Отлично, я очень рад, что ты согласилась 💍" data-m="Отлично, я очень рад, что ты согласился 💍" data-x="Отлично, я очень рад, что ты согласился(-ась) 💍">Отлично, я очень рад, что ты согласилась 💍</p>
     <p class="lead">Когда ты свободна?</p>
 
     <div class="field-label">📅 Выбери дату</div>
@@ -112,10 +112,11 @@
 
     const pageParams = new URLSearchParams(window.location.search);
     const token = pageParams.get('u');
-    const gender = pageParams.get('g') === 'm' ? 'm' : 'f';
+    const genderParam = pageParams.get('g');
+    const gender = genderParam === 'm' ? 'm' : genderParam === 'x' ? 'x' : 'f';
 
     const gladLead = document.getElementById('gladLead');
-    gladLead.textContent = gender === 'm' ? gladLead.dataset.m : gladLead.dataset.f;
+    gladLead.textContent = gender === 'm' ? gladLead.dataset.m : gender === 'x' ? gladLead.dataset.x : gladLead.dataset.f;
 
     submitBtn.addEventListener('click', () => {
       if (submitBtn.disabled) return;
