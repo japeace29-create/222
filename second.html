@@ -58,6 +58,14 @@
       <div class="food-card" data-food="Хинкали с хачапури"><span class="check">✓</span><span class="emoji">🥟</span><span class="label">Хинкали с хачапури</span></div>
     </div>
 
+    <div class="field-label" style="margin-top:28px;">➕ Дополнительно</div>
+    <div class="food-grid" id="extrasGrid">
+      <div class="food-card" data-extra="Кальян"><span class="check">✓</span><span class="emoji">💨</span><span class="label">Кальян</span></div>
+      <div class="food-card" data-extra="Ресторан"><span class="check">✓</span><span class="emoji">🍽️</span><span class="label">Ресторан</span></div>
+      <div class="food-card" data-extra="Баня"><span class="check">✓</span><span class="emoji">🧖</span><span class="label">Баня</span></div>
+      <div class="food-card" data-extra="Массаж"><span class="check">✓</span><span class="emoji">💆</span><span class="label">Массаж</span></div>
+    </div>
+
     <button class="submit-btn" id="submitBtn" disabled>Отправить! 💌</button>
   </div>
 
@@ -67,10 +75,12 @@
     const timeList = document.getElementById('timeList');
     const summaryBox = document.getElementById('summaryBox');
     const foodGrid = document.getElementById('foodGrid');
+    const extrasGrid = document.getElementById('extrasGrid');
     const submitBtn = document.getElementById('submitBtn');
 
     let selectedTime = null;
     const selectedFood = new Set();
+    const selectedExtras = new Set();
 
     function updateSummary() {
       if (dateInput.value && selectedTime) {
@@ -110,6 +120,19 @@
       });
     });
 
+    extrasGrid.querySelectorAll('.food-card').forEach((card) => {
+      card.addEventListener('click', () => {
+        const extra = card.dataset.extra;
+        if (selectedExtras.has(extra)) {
+          selectedExtras.delete(extra);
+          card.classList.remove('selected');
+        } else {
+          selectedExtras.add(extra);
+          card.classList.add('selected');
+        }
+      });
+    });
+
     const pageParams = new URLSearchParams(window.location.search);
     const token = pageParams.get('u');
     const genderParam = pageParams.get('g');
@@ -131,6 +154,7 @@
         date: dateInput.value,
         time: selectedTime,
         food: Array.from(selectedFood),
+        extras: Array.from(selectedExtras),
         gender
       };
       localStorage.setItem('dateInvite', JSON.stringify(payload));

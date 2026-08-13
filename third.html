@@ -23,6 +23,9 @@
 
       <div class="info-label">Будем кушать</div>
       <div class="info-value" id="foodValue">🍽️ —</div>
+
+      <div class="info-label" id="extrasLabel" style="display:none;">Дополнительно</div>
+      <div class="info-value" id="extrasValue" style="display:none;">✨ —</div>
     </div>
 
     <a class="home-btn" href="index.html">🏠 На главную</a>
@@ -40,6 +43,13 @@
       foodValue.textContent = data.food && data.food.length
         ? '🍽️ ' + data.food.join(', ')
         : '🍽️ сюрприз';
+
+      if (data.extras && data.extras.length) {
+        document.getElementById('extrasLabel').style.display = '';
+        const extrasValue = document.getElementById('extrasValue');
+        extrasValue.style.display = '';
+        extrasValue.textContent = '✨ ' + data.extras.join(', ');
+      }
 
       function applyGenderText(id) {
         const el = document.getElementById(id);

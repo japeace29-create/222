@@ -3,7 +3,7 @@ const { verifyToken, formatRuDateTime, notifyUser, incrCounter } = require('./_l
 module.exports = async (req, res) => {
   if (req.method !== 'POST') return res.status(405).json({ error: 'method not allowed' });
 
-  const { u, date, time, food, gender } = req.body || {};
+  const { u, date, time, food, extras, gender } = req.body || {};
   const parsed = verifyToken(u);
   if (!parsed) return res.status(400).json({ error: 'invalid token' });
 
@@ -13,10 +13,14 @@ module.exports = async (req, res) => {
       ? 'Получен ответ на свидание! 💌'
       : 'Она ответила на свидание! 💌';
 
-  const text =
+  let text =
     heading + '\n\n' +
     `📅 ${formatRuDateTime(date, time)}\n` +
     `🍽️ ${(food || []).join(', ') || 'не выбрано'}`;
+
+  if (extras && extras.length) {
+    text += `\n✨ ${extras.join(', ')}`;
+  }
 
   try {
     await notifyUser(parsed.platform, parsed.id, text);
