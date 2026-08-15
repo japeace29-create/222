@@ -240,13 +240,16 @@ body {
 
 .date-input {
   width: 100%;
-  padding: 14px 16px;
+  height: 52px;
+  padding: 0 16px;
   border-radius: 16px;
   border: 1.5px solid var(--pink-soft);
   font-family: 'Montserrat', sans-serif;
   font-size: 15px;
   color: var(--ink);
   background: #fff;
+  -webkit-appearance: none;
+  appearance: none;
 }
 
 .time-list {
