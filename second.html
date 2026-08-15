@@ -58,13 +58,8 @@
       <div class="food-card" data-food="Хинкали с хачапури"><span class="check">✓</span><span class="emoji">🥟</span><span class="label">Хинкали с хачапури</span></div>
     </div>
 
-    <div class="field-label" style="margin-top:28px;">➕ Дополнительно</div>
-    <div class="food-grid" id="extrasGrid">
-      <div class="food-card" data-extra="Кальян"><span class="check">✓</span><span class="emoji">💨</span><span class="label">Кальян</span></div>
-      <div class="food-card" data-extra="Ресторан"><span class="check">✓</span><span class="emoji">🍽️</span><span class="label">Ресторан</span></div>
-      <div class="food-card" data-extra="Баня"><span class="check">✓</span><span class="emoji">🧖</span><span class="label">Баня</span></div>
-      <div class="food-card" data-extra="Массаж"><span class="check">✓</span><span class="emoji">💆</span><span class="label">Массаж</span></div>
-    </div>
+    <div class="field-label" id="extrasLabel" style="margin-top:28px; display:none;">➕ Дополнительно</div>
+    <div class="food-grid" id="extrasGrid" style="display:none;"></div>
 
     <button class="submit-btn" id="submitBtn" disabled>Отправить! 💌</button>
   </div>
@@ -120,23 +115,32 @@
       });
     });
 
-    extrasGrid.querySelectorAll('.food-card').forEach((card) => {
-      card.addEventListener('click', () => {
-        const extra = card.dataset.extra;
-        if (selectedExtras.has(extra)) {
-          selectedExtras.delete(extra);
-          card.classList.remove('selected');
-        } else {
-          selectedExtras.add(extra);
-          card.classList.add('selected');
-        }
-      });
-    });
-
     const pageParams = new URLSearchParams(window.location.search);
     const token = pageParams.get('u');
     const genderParam = pageParams.get('g');
     const gender = genderParam === 'm' ? 'm' : genderParam === 'x' ? 'x' : 'f';
+
+    const extrasList = (pageParams.get('e') || '').split(',').map((s) => s.trim()).filter(Boolean);
+    if (extrasList.length) {
+      document.getElementById('extrasLabel').style.display = '';
+      extrasGrid.style.display = '';
+      extrasList.forEach((extra) => {
+        const card = document.createElement('div');
+        card.className = 'food-card';
+        card.innerHTML = `<span class="check">✓</span><span class="emoji">✨</span><span class="label"></span>`;
+        card.querySelector('.label').textContent = extra;
+        card.addEventListener('click', () => {
+          if (selectedExtras.has(extra)) {
+            selectedExtras.delete(extra);
+            card.classList.remove('selected');
+          } else {
+            selectedExtras.add(extra);
+            card.classList.add('selected');
+          }
+        });
+        extrasGrid.appendChild(card);
+      });
+    }
 
     function applyGenderText(id) {
       const el = document.getElementById(id);

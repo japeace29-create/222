@@ -36,6 +36,7 @@
     const genderParam = params.get('g');
     const gender = genderParam === 'm' ? 'm' : genderParam === 'x' ? 'x' : 'f';
     const customName = params.get('n');
+    const extrasParam = params.get('e');
 
     const titleEl = document.getElementById('titleEl');
     titleEl.textContent = customName
@@ -47,6 +48,7 @@
       if (token) qs.set('u', token);
       qs.set('g', gender);
       if (customName) qs.set('n', customName);
+      if (extrasParam) qs.set('e', extrasParam);
       window.location.href = `second.html?${qs.toString()}`;
     });
 

@@ -115,31 +115,34 @@ async function getStats() {
   return { linksCreated, completed };
 }
 
-// Short-lived "waiting for a name" state per sender, so the bot can ask a follow-up
-// question across two separate webhook calls (stateless functions otherwise can't).
-async function setPendingName(platform, id, gender) {
+// Short-lived conversation state per sender, so the bot can walk through a multi-step
+// dialog (gender -> optional name -> optional extras) across separate webhook calls
+// (stateless functions otherwise can't remember what was already answered).
+async function setPendingState(platform, id, state) {
   if (!kvReady()) return;
   try {
-    await fetch(`${process.env.KV_REST_API_URL}/set/pending:${platform}:${id}/${gender}?EX=600`, {
+    const value = encodeURIComponent(JSON.stringify(state));
+    await fetch(`${process.env.KV_REST_API_URL}/set/pending:${platform}:${id}/${value}?EX=600`, {
       headers: { Authorization: `Bearer ${process.env.KV_REST_API_TOKEN}` }
     });
   } catch (e) {}
 }
 
-async function getPendingName(platform, id) {
+async function getPendingState(platform, id) {
   if (!kvReady()) return null;
   try {
     const resp = await fetch(`${process.env.KV_REST_API_URL}/get/pending:${platform}:${id}`, {
       headers: { Authorization: `Bearer ${process.env.KV_REST_API_TOKEN}` }
     });
     const data = await resp.json();
-    return data.result || null;
+    if (!data.result) return null;
+    try { return JSON.parse(data.result); } catch (e) { return null; }
   } catch (e) {
     return null;
   }
 }
 
-async function clearPendingName(platform, id) {
+async function clearPendingState(platform, id) {
   if (!kvReady()) return;
   try {
     await fetch(`${process.env.KV_REST_API_URL}/del/pending:${platform}:${id}`, {
@@ -152,5 +155,5 @@ module.exports = {
   makeToken, verifyToken, formatRuDateTime,
   sendTelegramMessage, sendVkMessage, notifyUser,
   incrCounter, getStats, kvReady,
-  setPendingName, getPendingName, clearPendingName
+  setPendingState, getPendingState, clearPendingState
 };
