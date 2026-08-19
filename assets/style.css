@@ -449,3 +449,50 @@ body {
 .home-btn:hover {
   transform: translateY(-2px);
 }
+
+/* Soft call-to-action shown to the person who just received an invite —
+   the moment they are most likely to want one of their own. */
+.viral-block {
+  margin-top: 30px;
+  padding-top: 26px;
+  border-top: 1px dashed var(--pink-soft);
+}
+
+.viral-title {
+  font-family: 'Great Vibes', cursive;
+  font-size: 30px;
+  color: var(--pink-deep);
+  margin: 0 0 6px;
+}
+
+.viral-text {
+  font-size: 14px;
+  line-height: 1.6;
+  color: var(--muted);
+  margin: 0 0 18px;
+}
+
+.viral-btns {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+.viral-btn {
+  display: block;
+  padding: 14px;
+  border-radius: 999px;
+  border: 2px solid var(--pink-soft);
+  background: #fff;
+  color: var(--pink-deep);
+  font-weight: 700;
+  font-size: 15px;
+  text-decoration: none;
+  transition: transform 0.15s ease, border-color 0.15s ease, background 0.15s ease;
+}
+
+.viral-btn:hover {
+  transform: translateY(-2px);
+  border-color: var(--pink-deep);
+  background: #fff0f6;
+}
