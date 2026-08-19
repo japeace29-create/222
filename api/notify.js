@@ -22,12 +22,22 @@ module.exports = async (req, res) => {
     text += `\n✨ ${extras.join(', ')}`;
   }
 
+  const followUp =
+    'Хорошего свидания! 🥂\n\n' +
+    'Подписывайся на наш паблик — там идеи для свиданий и обновления бота:\n' +
+    'https://vk.com/club240596184';
+
   try {
     await notifyUser(parsed.platform, parsed.id, text);
     await incrCounter('completed');
   } catch (e) {
     return res.status(502).json({ error: 'send failed' });
   }
+
+  // Sent separately so a failure here never breaks the main notification.
+  try {
+    await notifyUser(parsed.platform, parsed.id, followUp);
+  } catch (e) {}
 
   res.status(200).json({ ok: true });
 };
