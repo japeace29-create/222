@@ -44,7 +44,17 @@
         </span>
         <span class="radio"></span>
       </label>
+      <label class="time-card" data-time="custom" id="customTimeCard">
+        <span class="emoji">⏰</span>
+        <span class="text">
+          <span class="time">Своё время</span>
+          <span class="joke">Тебе виднее — жду!</span>
+        </span>
+        <span class="radio"></span>
+      </label>
     </div>
+
+    <input type="time" class="date-input" id="customTimeInput" style="display:none; margin-top:12px;">
 
     <div class="summary-box" id="summaryBox" style="display:none;"></div>
 
@@ -68,6 +78,8 @@
   <script>
     const dateInput = document.getElementById('dateInput');
     const timeList = document.getElementById('timeList');
+    const customTimeCard = document.getElementById('customTimeCard');
+    const customTimeInput = document.getElementById('customTimeInput');
     const summaryBox = document.getElementById('summaryBox');
     const foodGrid = document.getElementById('foodGrid');
     const extrasGrid = document.getElementById('extrasGrid');
@@ -97,9 +109,23 @@
         });
         card.classList.add('selected');
         card.querySelector('.radio').textContent = '✓';
-        selectedTime = card.dataset.time;
+
+        if (card.dataset.time === 'custom') {
+          customTimeInput.style.display = '';
+          selectedTime = customTimeInput.value || null;
+          customTimeInput.focus();
+        } else {
+          customTimeInput.style.display = 'none';
+          selectedTime = card.dataset.time;
+        }
         updateSummary();
       });
+    });
+
+    customTimeInput.addEventListener('click', (e) => e.stopPropagation());
+    customTimeInput.addEventListener('change', () => {
+      selectedTime = customTimeInput.value || null;
+      updateSummary();
     });
 
     foodGrid.querySelectorAll('.food-card').forEach((card) => {
